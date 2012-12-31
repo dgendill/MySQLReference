@@ -1,0 +1,59 @@
+CREATE TABLE `learning`.`relatives` (
+id INTEGER,
+name VARCHAR(50),
+relation VARCHAR(50)
+);
+
+ALTER TABLE `learning`.`relatives` ADD CONSTRAINT `id` PRIMARY KEY (id);
+
+ALTER TABLE `learning`.`relatives` AUTO INCREMENT=1;
+
+INSERT INTO `learning`.`relatives` (name, relation) VALUES ('Barb','Aunt')
+
+SELECT * FROM `learning`.`relatives`;
+
+ALTER TABLE `learning`.`relatives` MODIFY ID INTEGER NOT NULL AUTO_INCREMENT
+
+USE `learning`
+
+CREATE TABLE people (
+id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(50)
+);
+
+INSERT INTO people (id, name) SELECT id, name FROM relatives;
+
+ALTER TABLE relatives DROP name;
+
+ALTER TABLE relatives ADD COLUMN (person1 INTEGER NOT NULL, person2 INTEGER NOT NULL);
+
+ALTER TABLE relatives ADD COLUMN (relationship varchar(50) NULL);
+
+SELECT * FROM relatives;
+
+CREATE TABLE relationship (
+id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+name varchar(50) NULL UNIQUE
+);
+
+ALTER TABLE relatives DROP person1, person2;
+
+ALTER TABLE relatives ADD (
+person1 INTEGER REFERENCES people (id),
+person2 INTEGER REFERENCES people (id),
+relationship INTEGER REFERENCES relationship(id)
+);
+
+
+DESCRIBE relationship;
+
+
+INSERT INTO relationship (`name`) VALUES ('aunt'),('mother'),('son'),('daughter'),('father'),('brother'),('sister');
+
+INSERT INTO relatives (`person1`,`person2`,`relationship`) VALUES (
+    (SELECT id FROM people WHERE name='Barb'),
+    (SELECT id FROM people WHERE name='Mary'),
+    (SELECT id FROM relationship WHERE name='sister')
+);
+
+SELECT r.person1, r.person2, r.relationship, p.name, rr.name FROM relatives r JOIN people p ON p.id = r.person1 OR p.id = r.person2 JOIN relationship rr WHERE r.relationship = rr.id;

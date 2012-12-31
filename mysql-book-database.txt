@@ -1,0 +1,63 @@
+-------------------
+ADD ENTRY TO TABLE:
+-------------------
+
+	INSERT INTO `database_name`.`table_name` (`categoryID`, `categoryName`) VALUES (NULL, 'category_name');
+	INSERT INTO `booksdb`.`bookcategories` (`categoryID`, `categoryName`) VALUES (NULL, 'Arts & Photography');
+
+
+--------------------
+SHOW ALL CATEGORIES:
+--------------------
+
+	SELECT bookcategories.categoryName FROM bookcategories
+	
+	
+------------------------------------
+SHOW ALL BOOKS AND THEIR CATEGORIES:
+------------------------------------
+
+	SELECT
+		bi.bookTitle,
+		bookcategories.categoryName
+	FROM `bookcategories` 
+	INNER JOIN bookinformation bi ON bookcategories.categoryID = bi.categoryID
+
+		-- OR --
+
+	SELECT bookinformation.bookTitle, bookcategories.categoryName
+	FROM bookcategories
+	INNER JOIN bookinformation bookinformation ON bookcategories.categoryID = bookinformation.categoryID
+
+-------------------------------------------------
+SHOW ALL BOOKS THAT ARE IN A PARTICULAR CATEGORY:
+-------------------------------------------------
+
+	SELECT bookinformation.bookTitle, bookcategories.categoryName
+	FROM bookcategories
+	INNER JOIN bookinformation bookinformation ON bookcategories.categoryID = bookinformation.categoryID
+	WHERE bookcategories.categoryName = "Computers & Technology"
+
+----------------
+ADD FOREIGN KEY:
+----------------
+
+	ALTER TABLE  `bookinformation` DROP FOREIGN KEY  `bookinformation_ibfk_1` ,
+	ADD FOREIGN KEY (  `categoryID` ) REFERENCES  `booksdb`.`bookcategories` (
+	`categoryID`
+	) ON DELETE RESTRICT ON UPDATE CASCADE ;
+
+
+-------------
+UPDATE BOOK ENTRY:
+-------------
+
+	UPDATE bookinformation
+	SET description="A good book"
+	WHERE bookTitle="Murach’s PHP & MySQL"
+
+---------
+ADD BOOK:
+---------
+
+	INSERT INTO `booksdb`.`bookinformation` (`bookID`, `categoryID`, `bookTitle`, `author`, `description`, `isbn`) VALUES (NULL, '', '', '', '', '');
